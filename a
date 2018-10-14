@@ -1,0 +1,222 @@
+#!/bin/bash
+cd
+cd ..
+cd ..
+cd /sys/class/leds
+file=(*)
+filesize=${#file[@]}
+i=0
+tmp=
+k="."
+k2="quit"
+k3=")"
+
+listNum=0
+bool=0
+selectNum=0
+function prin()
+{
+		echo "What would you like to do with this led?"
+		echo "1)turn on"
+		echo "2)turn off"
+		echo "3)associate with a sysytem event"
+		echo "4)associate with the performance of a process"
+		echo "5)stop association with a process' performance"
+	        echo "6)quit to main menu"
+
+}
+function event1()
+{
+while :
+do	
+    echo "Associate Led with a system Event"
+    echo "==================================="
+    echo "Available events are :"
+    echo "* means current event"
+    echo "---------------------"
+    listNum=0
+	for list in $(cat /sys/class/leds/$led/trigger)
+				do
+					listArray[$listNum]=$list ;
+					listNum=`expr $listNum + 1`;
+				   list=`echo	${list/\]/\*}`;
+				   list=`echo	${list/\[}`;
+					echo $listNum$k3$list ;
+					#listNum=`expr $listNum + 1`
+				   #  ((listNum=$listNum+1))
+				   #  let listNum=listNum+1
+			   done
+			   quit0=`expr $listNum + 1`
+			   echo $quit0") back to previous menu"
+			   for ((x=0 ; x<$listNum ; x++))
+                   do
+			   array[$x]=`expr $x + 1`
+		   done
+		   max=`expr $listNum + 1`
+		   read -p "please enter a number(1- $max):"  select3
+		   for ((x=1 ; x<=$listNum ; x++))
+		   do
+			 tmp=`echo $select3 |sed 's/[0-9]//g' |sed 's/-//g'`
+			# [ !  "$(tmp)" ] && { echo "input must be integer !"; bool=1;break 1; }
+			 if [ -n "$tmp" ]
+			 then
+			 echo "input must be integer !";
+			 bool=1;
+			 break 1;
+			 
+			  elif [ "$select3" -eq "$x" ]
+			   then 
+				#   bool=1
+                                 selectNum=$x
+			 elif [ "$select3" -eq "$quit0" ]
+			 then
+			break 2
+	                elif [ "$x" -gt "$listNum" ]
+			then
+				echo "invalid input !"
+				break 1;
+                         fi
+		   done
+		   
+		   if [ "$bool" -ne "1" ]
+		   then
+                               selectNum=`expr $selectNum - 1`
+                           echo ${listArray[$selectNum]} | sudo tee /sys/class/leds/$led/trigger
+		   fi
+done
+}
+
+while :
+do
+
+echo "Welcome to Led_Konfigurator!"
+echo "==================================="
+echo "Please select an led to configure:"
+for ((j=1 ; j <= $filesize ; j++))
+do
+	led=${file[$j-1]}
+	echo $j$k$led
+
+done
+
+echo $j$k$k2
+ 
+
+read -p "Please enter a number(1-9)for the led to configure or quit :" select1
+
+
+for ((m=1 ; m <=$j ; m++))
+do
+if [ "$select1" -eq "$j" ]
+then
+
+	exit
+
+
+  elif [ "$select1" -eq "$m" ]	
+then	
+		while :
+		do
+			x=$[m-1]
+			
+			led=${file[$x]}
+                        
+			echo $led
+		
+		prin
+
+		read -p "Please enter a number (1-6)for your choice:" select2
+		case $select2 in
+
+			1)
+				#sudo echo none > /sys/class/leds/$led/trigger
+                            echo 1 | sudo tee  /sys/class/leds/$led/brightness;;
+			2)#sudo echo none > /sys/class/leds/$led/trigger
+			    echo 0 |sudo tee  /sys/class/leds/$led/brightness;;
+			
+			3)
+		               event1
+			
+				#	for list in $(cat /sys/class/leds/$led/trigger)
+			#	do
+			#		listNum=`expr $listNum + 1`
+			#	echo $listNum$k3$list
+					#listNum=`expr $listNum + 1`
+				   #  ((listNum=$listNum+1))
+				   #  let listNum=listNum+1
+			#	done
+				;;
+			4)read -p "please input memory or cup" re
+				cd
+                                echo "start monitor cpu "
+				./gy&		;;
+			5)break 1;;
+			6)break 1;;
+		        *)   
+			   echo "invalid input please enter a number (1-6) !";;	
+		esac
+	done
+	
+elif [ "$m" -gt "$j" ]
+then
+echo "Invalid input please re-enter !"
+fi
+
+done
+done
+
+
+
+
+
+
+
+
+
+
+
+#y1=$[m+1]
+#y2=$[m+2]
+#if ["$var"-eq "$y1"]
+
+#then
+	
+#led=${file[$m]}
+#elif [ "$var" -eq"$y"]
+#then
+#	x=$[m+1]
+#	led=${file[$x]}
+#fi
+#	 while :	
+#	do
+#				
+#
+#		echo $led
+#		
+#				echo "========="
+#		echo "What would you like to do with this led?"
+#		echo "1)turn on"
+#		echo "2)turn off"
+#		echo "3)associate with a sysytem event"
+#		echo "4)associate with the performance of a process"
+#		echo "5)stop association with a process' performance"
+#	        echo "6)quit to main menu"
+#
+#		read -p "Please enter a number (1-6)for your choice:" var2
+#		case $var2 in
+#			1)#sudo echo none > /sys/class/leds/$led/trigger
+#			  sudo echo 1 | sudo tee /sys/class/leds/$led/brightness;;
+#			2)#sudo echo none > /sys/class/leds/$led/trigger
+#			  sudo echo 0 | sudo tee  /sys/class/leds/$led/brightness;;
+#			3)break 1;;
+#			4)break 1;;
+#			5)break 1;;
+#			6)break 1;;
+#			
+#		esac
+#	done
+
+#done
+     
+  
+	 

@@ -1,0 +1,96 @@
+#!/bin/bash
+while :
+do
+cd
+li[0]=""
+i=0
+for list in `ps aux | grep chromium-browser | grep -v grep`
+do
+li[$i]=$list
+i=`expr $i + 1 `
+done
+cpu[0]=0
+men[0]=0
+k=0
+x=0
+for ((j=0;j<i;j++))
+do
+	if [ "pi" = "${li[$j]}" ]
+then
+       cpu[$k]=${li[$j+2]}
+men[$k]=${li[$j+3]}	
+   
+	k=`expr $k + 1`
+
+fi
+
+done
+
+m=${cpu[0]}
+if [ "5" -lt "6" ]
+then
+    m=`echo " $m * 10" | bc`
+	
+   sudo awk -v VARIABLE=$m  'BEGIN { OFMT="%d"; fi=int(VARIABLE) ; m=fi; print fi; }' > output
+     m=`cat output`
+
+fi
+cd /sys/class/leds
+if [ "$m" -lt "50" ]
+then
+    echo 0 | sudo tee /sys/class/leds/led1/brightness
+    
+ elif [ "$m" -gt "50" ]
+ then
+	 echo 1 | sudo tee /sys/class/leds/led1/brightness
+	 sleep 0.95
+	 echo 0 | sudo tee /sys/class/leds/led1/brightness
+  elif [ "$m" -gt "150" ]
+ then
+	 echo 1 | sudo tee /sys/class/leds/led1/brightness
+	 sleep 0.85
+	 echo 0 | sudo tee /sys/class/leds/led1/brightness
+ 
+ elif [ "$m" -gt "250" ]
+ then
+	 echo 1 | sudo tee /sys/class/leds/led1/brightness
+	 sleep 0.75
+	 echo 0 | sudo tee /sys/class/leds/led1/brightness
+ 
+ elif [ "$m" -gt "350" ]
+ then
+	 echo 1 | sudo tee /sys/class/leds/led1/brightness
+	 sleep 0.65
+	 echo 0 | sudo tee /sys/class/leds/led1/brightness
+  elif [ "$m" -gt "450" ]
+ then
+	 echo 1 | sudo tee /sys/class/leds/led1/brightness
+	 sleep 0.55
+	 echo 0 | sudo tee /sys/class/leds/led1/brightness
+  elif [ "$m" -gt "550" ]
+ then
+	 echo 1 | sudo tee /sys/class/leds/led1/brightness
+	 sleep 0.45
+	 echo 0 | sudo tee /sys/class/leds/led1/brightness
+  elif [ "$m" -gt "650" ]
+ then
+	 echo 1 | sudo tee /sys/class/leds/led1/brightness
+	 sleep 0.35
+	 echo 0 | sudo tee /sys/class/leds/led1/brightness
+  elif [ "$m" -gt "750" ]
+ then
+	 echo 1 | sudo tee /sys/class/leds/led1/brightness
+	 sleep 0.25
+	 echo 0 | sudo tee /sys/class/leds/led1/brightness
+  elif [ "$m" -gt "850" ]
+ then
+	 echo 1 | sudo tee /sys/class/leds/led1/brightness
+	 sleep 0.15
+	 echo 0 | sudo tee /sys/class/leds/led1/brightness
+  elif [ "$m" -gt "950" ]
+ then
+	 echo 1 | sudo tee /sys/class/leds/led1/brightness
+	 sleep 0.05
+	 echo 0 | sudo tee /sys/class/leds/led1/brightness
+ fi
+ done
